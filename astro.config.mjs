@@ -7,4 +7,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  site: 'https://franriv24.github.io',
+  base: '/comodoro-api.github.io',
 });
