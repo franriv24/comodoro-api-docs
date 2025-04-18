@@ -1,11 +1,159 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import ApiDocsLayout from "../layouts/ApiDocsLayout.astro";
+import WelcomeSection from "../components/Welcome.astro";
+import CodeBlock from "../components/CodeBlock.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const apiInfo = {
+  apiName: "Comodoro Delivery",
+  apiVersion: "v1.0",
+  apiBaseUrl: "https://api.comodorodelivery.app.br",
+};
+
+const jsExample = `
+fetch('${apiInfo.apiBaseUrl}/users', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+`;
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<ApiDocsLayout title="API Documentation">
+  <WelcomeSection
+    apiName={apiInfo.apiName}
+    apiVersion={apiInfo.apiVersion}
+    apiBaseUrl={apiInfo.apiBaseUrl}
+  />
+
+  <hr class="my-12 border-gray-200" />
+
+  <!-- Code Examples Section -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Example Request</h2>
+
+    <div class="bg-gray-50 p-1 rounded-lg border border-gray-200 mb-8">
+      <!-- Tab navigation -->
+      <div class="flex border-b border-gray-200">
+				<button
+					class="px-4 py-2 font-medium text-blue-600 border-b-2 border-blue-600"
+					id="tab-js"
+				>
+					JavaScript
+				</button>
+        <button
+          class="px-4 py-2 font-medium text-gray-600 hover:text-blue-600"
+          id="tab-curl"
+        >
+          cURL
+        </button>
+      </div>
+
+      <!-- Tab content -->
+      <div class="p-4">
+        <!-- JavaScript Example -->
+        <div id="content-js" class="tab-content">
+          <CodeBlock code={jsExample} lang="js" />
+        </div>
+				<!-- cURL Example (hidden by default) -->
+        <div id="content-curl" class="tab-content hidden">
+          <CodeBlock
+            code={`curl -X GET "${apiInfo.apiBaseUrl}/users" -H "Authorization: Bearer YOUR_API_TOKEN" -H "Content-Type: application/json"`}
+            lang="curl"
+          />
+        </div>
+			</div>
+    </div>
+  </div>
+
+  <!-- Recent Updates -->
+  <div class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Recent Updates</h2>
+
+    <div class="space-y-4">
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-semibold">New User Preferences Endpoint</h3>
+            <p class="text-gray-600 mt-1">
+              Added new endpoint to manage user preferences and settings.
+            </p>
+          </div>
+          <span class="text-sm text-gray-500">April 10, 2025</span>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-semibold">Enhanced Rate Limiting</h3>
+            <p class="text-gray-600 mt-1">
+              Improved rate limiting with clearer headers and documentation.
+            </p>
+          </div>
+          <span class="text-sm text-gray-500">March 22, 2025</span>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-semibold">Pagination Improvements</h3>
+            <p class="text-gray-600 mt-1">
+              Added cursor-based pagination to all list endpoints for better
+              performance.
+            </p>
+          </div>
+          <span class="text-sm text-gray-500">March 5, 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ApiDocsLayout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabs = ["js", "curl"];
+
+    tabs.forEach((tab) => {
+      const tabButton = document.getElementById(`tab-${tab}`);
+      const tabContent = document.getElementById(`content-${tab}`);
+
+      if (!tabButton || !tabContent) {
+        return;
+      }
+
+      tabButton.addEventListener("click", () => {
+        // Hide all content
+        document.querySelectorAll(".tab-content").forEach((content) => {
+          content.classList.add("hidden");
+        });
+
+        // Remove active class from all tabs
+        document.querySelectorAll('[id^="tab-"]').forEach((button) => {
+          button.classList.remove(
+            "text-blue-600",
+            "border-b-2",
+            "border-blue-600"
+          );
+          button.classList.add("text-gray-600");
+        });
+
+        // Show selected content
+        tabContent.classList.remove("hidden");
+
+        // Add active class to selected tab
+        tabButton.classList.add(
+          "text-blue-600",
+          "border-b-2",
+          "border-blue-600"
+        );
+        tabButton.classList.remove("text-gray-600");
+      });
+    });
+  });
+</script>

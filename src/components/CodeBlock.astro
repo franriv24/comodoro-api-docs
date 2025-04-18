@@ -1,0 +1,19 @@
+---
+// Props: código (string) e linguagem (opcional)
+const { code, lang = "plaintext" } = Astro.props;
+
+// Função que escapa HTML especial pra exibir o código corretamente
+function escapeHtml(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+---
+
+<pre
+  class="bg-gray-800 text-white p-4 rounded overflow-x-auto">
+  <code class={`language-${lang}`} set:html={escapeHtml(code)}></code>
+</pre>

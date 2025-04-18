@@ -1,0 +1,49 @@
+---
+import ApiDocsLayout from "../layouts/ApiDocsLayout.astro";
+---
+
+<ApiDocsLayout title="Page Not Found">
+  <div class="flex flex-col items-center justify-center py-12 text-center">
+    <div class="mb-8">
+      <span class="text-6xl font-bold text-gray-300">404</span>
+    </div>
+
+    <svg
+      class="w-24 h-24 text-gray-400 mb-6"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      ></path>
+    </svg>
+
+    <h1 class="text-3xl font-bold mb-4">Endpoint Not Found</h1>
+
+    <p class="text-gray-600 mb-8 max-w-lg mx-auto">
+      The API endpoint you're looking for doesn't exist or may have been moved.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a
+        href="/"
+        class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+      >
+        Go to Documentation Home
+      </a>
+
+      <a
+        href="#"
+        onclick="history.back(); return false;"
+        class="px-5 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+      >
+        Go Back
+      </a>
+    </div>
+  </div>
+</ApiDocsLayout>

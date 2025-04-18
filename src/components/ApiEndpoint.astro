@@ -1,0 +1,199 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+
+export interface Param {
+  name: string;
+  type: string;
+  required: boolean;
+  description: string;
+}
+
+export interface Header {
+  name: string;
+  required: boolean;
+  description: string;
+}
+
+export interface Response {
+  status: number;
+  description: string;
+  example: string;
+}
+
+export interface Props {
+  title: string;
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  endpoint: string;
+  description: string;
+  params?: Param[];
+  headers?: Header[];
+  requestBody?: string;
+  responses: Response[];
+}
+
+const {
+  title,
+  method,
+  endpoint,
+  description,
+  params = [],
+  headers = [],
+  requestBody,
+  responses,
+} = Astro.props;
+
+const methodColors = {
+  GET: "bg-green-100 text-green-800",
+  POST: "bg-blue-100 text-blue-800",
+  PUT: "bg-yellow-100 text-yellow-800",
+  DELETE: "bg-red-100 text-red-800",
+  PATCH: "bg-purple-100 text-purple-800",
+};
+
+const methodColor = methodColors[method];
+---
+
+<div
+  class="api-endpoint mb-12 border border-gray-200 rounded-md overflow-hidden"
+>
+  <div class="bg-gray-50 p-4 border-b border-gray-200">
+    <div class="flex items-center gap-3 mb-2">
+      <span
+        class={`${methodColor} px-3 py-1 rounded-md font-mono font-bold text-sm`}
+      >
+        {method}
+      </span>
+      <h3 class="text-xl font-semibold">{title}</h3>
+    </div>
+    <code class="font-mono text-sm bg-gray-800 text-white p-2 rounded block"
+      >{endpoint}</code
+    >
+    <p class="mt-3 text-gray-600">{description}</p>
+  </div>
+
+  <div class="p-4">
+    <!-- Parameters Section -->
+    {
+      params.length > 0 && (
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Name
+                  </th>
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Type
+                  </th>
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Required
+                  </th>
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {params.map((param) => (
+                  <tr>
+                    <td class="py-2 px-4 border border-gray-200 font-mono text-sm">
+                      {param.name}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-200 font-mono text-sm">
+                      {param.type}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-200">
+                      {param.required ? "Yes" : "No"}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-200">
+                      {param.description}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Headers Section -->
+    {
+      headers.length > 0 && (
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold mb-2">Headers</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Name
+                  </th>
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Required
+                  </th>
+                  <th class="text-left py-2 px-4 border border-gray-200">
+                    Description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {headers.map((header) => (
+                  <tr>
+                    <td class="py-2 px-4 border border-gray-200 font-mono text-sm">
+                      {header.name}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-200">
+                      {header.required ? "Yes" : "No"}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-200">
+                      {header.description}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Request Body Section -->
+    {
+      requestBody && (
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold mb-2">Request Body</h4>
+          <CodeBlock code={requestBody} lang="js" />
+        </div>
+      )
+    }
+
+    <!-- Responses Section -->
+    <div class="mb-6">
+      <h4 class="text-lg font-semibold mb-2">Responses</h4>
+      {
+        responses.map((response) => (
+          <div class="mb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                class={`px-2 py-1 rounded-md font-mono text-sm ${
+                  response.status >= 200 && response.status < 300
+                    ? "bg-green-100 text-green-800"
+                    : response.status >= 400
+                      ? "bg-red-100 text-red-800"
+                      : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {response.status}
+              </span>
+              <span>{response.description}</span>
+            </div>
+            <CodeBlock code={response.example} lang="js" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

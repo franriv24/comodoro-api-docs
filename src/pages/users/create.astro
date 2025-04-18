@@ -1,0 +1,89 @@
+---
+import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
+import ApiEndpoint from "../../components/ApiEndpoint.astro";
+
+const title = "Create User API";
+---
+
+<ApiDocsLayout title={title}>
+  <h1 class="text-3xl font-bold mb-8">Users API</h1>
+
+  <ApiEndpoint
+    title="Create User"
+    method="POST"
+    endpoint="/users"
+    description="Creates a new user in the system."
+    headers={[
+      {
+        name: "Authorization",
+        required: true,
+        description:
+          "Bearer token for authentication. Format: 'Bearer {token}'",
+      },
+      {
+        name: "Content-Type",
+        required: true,
+        description: "Must be 'application/json'",
+      },
+    ]}
+    requestBody={`
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "StrongPassword123!",
+  "role": "user",
+  "profile": {
+    "avatar_url": "https://example.com/avatars/john.jpg",
+    "bio": "Software developer based in San Francisco",
+    "location": "San Francisco, CA"
+  }
+}
+`}
+    responses={[
+      {
+        status: 201,
+        description: "User created successfully",
+        example: `
+{
+  "data": {
+    "id": "usr_123456789",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "user",
+    "created_at": "2023-04-25T08:30:00Z",
+    "updated_at": "2023-04-25T08:30:00Z"
+  }
+}
+`,
+      },
+      {
+        status: 400,
+        description: "Bad Request - Validation errors",
+        example: `
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Validation failed",
+    "details": {
+      "email": "Must be a valid email address",
+      "password": "Password must be at least 8 characters with at least one uppercase letter, one lowercase letter, one number, and one special character"
+    }
+  }
+}
+`,
+      },
+      {
+        status: 409,
+        description: "Conflict - Email already in use",
+        example: `
+{
+  "error": {
+    "code": "conflict",
+    "message": "Email address is already in use"
+  }
+}
+`,
+      },
+    ]}
+  />
+</ApiDocsLayout>

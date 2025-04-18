@@ -1,0 +1,68 @@
+---
+const categories = [
+  {
+    name: "Authentication",
+    endpoints: [
+      { title: "Login", href: "/auth/login" },
+      { title: "Refresh Token", href: "/auth/refresh-token" },
+    ],
+  },
+  {
+    name: "Users",
+    endpoints: [
+      { title: "List Users", href: "/users/list" },
+      { title: "Get User", href: "/users/get" },
+      { title: "Create User", href: "/users/create" },
+      { title: "Update User", href: "/users/update" },
+      { title: "Delete User", href: "/users/delete" },
+    ],
+  },
+];
+---
+
+<nav class="py-4">
+  {
+    categories.map((category) => (
+      <div class="mb-4">
+        <h3 class="px-6 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+          {category.name}
+        </h3>
+        <ul>
+          {category.endpoints.map((endpoint) => (
+            <li>
+              <a
+                href={endpoint.href}
+                class="px-6 py-2 text-gray-700 hover:bg-gray-100 flex items-center text-sm"
+              >
+                {endpoint.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</nav>
+
+<style>
+  a.active {
+    background-color: #f3f4f6;
+    border-left: 3px solid #4f46e5;
+    color: #4f46e5;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // Highlight the current page in the navigation
+  document.addEventListener("DOMContentLoaded", () => {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll("nav a");
+
+    navLinks.forEach((link) => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>

@@ -1,0 +1,108 @@
+---
+import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
+import ApiEndpoint from "../../components/ApiEndpoint.astro";
+
+const title = "List Users API";
+---
+
+<ApiDocsLayout title={title}>
+  <h1 class="text-3xl font-bold mb-8">Users API</h1>
+
+  <ApiEndpoint
+    title="List Users"
+    method="GET"
+    endpoint="/users"
+    description="Returns a paginated list of all users."
+    params={[
+      {
+        name: "page",
+        type: "integer",
+        required: false,
+        description: "Page number for pagination. Default is 1.",
+      },
+      {
+        name: "limit",
+        type: "integer",
+        required: false,
+        description: "Number of items per page. Default is 20, maximum is 100.",
+      },
+      {
+        name: "sort",
+        type: "string",
+        required: false,
+        description:
+          "Field to sort by. Prefix with '-' for descending order. Example: 'name' or '-created_at'",
+      },
+    ]}
+    headers={[
+      {
+        name: "Authorization",
+        required: true,
+        description:
+          "Bearer token for authentication. Format: 'Bearer {token}'",
+      },
+      {
+        name: "Accept",
+        required: false,
+        description: "Media type. Default is 'application/json'",
+      },
+    ]}
+    responses={[
+      {
+        status: 200,
+        description: "Successful response",
+        example: `
+{
+  "data": [
+    {
+      "id": "usr_123456789",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "user",
+      "created_at": "2023-01-15T08:30:00Z",
+      "updated_at": "2023-04-20T14:22:10Z"
+    },
+    {
+      "id": "usr_987654321",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "role": "admin",
+      "created_at": "2023-02-20T10:15:30Z",
+      "updated_at": "2023-04-18T09:45:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 42
+  }
+}
+`,
+      },
+      {
+        status: 401,
+        description: "Unauthorized - Invalid or missing authentication token",
+        example: `
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid or missing authentication token"
+  }
+}
+`,
+      },
+      {
+        status: 403,
+        description: "Forbidden - Insufficient permissions",
+        example: `
+{
+  "error": {
+    "code": "forbidden",
+    "message": "You don't have permission to access this resource"
+  }
+}
+`,
+      },
+    ]}
+  />
+</ApiDocsLayout>

@@ -1,0 +1,72 @@
+---
+import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
+import ApiEndpoint from "../../components/ApiEndpoint.astro";
+
+const title = "Get User API";
+---
+
+<ApiDocsLayout title={title}>
+  <h1 class="text-3xl font-bold mb-8">Users API</h1>
+
+  <ApiEndpoint
+    title="Get User"
+    method="GET"
+    endpoint="/users/{id}"
+    description="Returns detailed information about a specific user."
+    params={[
+      {
+        name: "id",
+        type: "string",
+        required: true,
+        description: "The unique identifier of the user.",
+      },
+    ]}
+    headers={[
+      {
+        name: "Authorization",
+        required: true,
+        description:
+          "Bearer token for authentication. Format: 'Bearer {token}'",
+      },
+    ]}
+    responses={[
+      {
+        status: 200,
+        description: "Successful response",
+        example: `
+{
+  "data": {
+    "id": "usr_123456789",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "user",
+    "created_at": "2023-01-15T08:30:00Z",
+    "updated_at": "2023-04-20T14:22:10Z",
+    "profile": {
+      "avatar_url": "https://example.com/avatars/john.jpg",
+      "bio": "Software developer based in San Francisco",
+      "location": "San Francisco, CA"
+    },
+    "preferences": {
+      "email_notifications": true,
+      "two_factor_auth": false
+    }
+  }
+}
+`,
+      },
+      {
+        status: 404,
+        description: "Not Found - User doesn't exist",
+        example: `
+{
+  "error": {
+    "code": "not_found",
+    "message": "User with id usr_123456789 not found"
+  }
+}
+`,
+      },
+    ]}
+  />
+</ApiDocsLayout>
