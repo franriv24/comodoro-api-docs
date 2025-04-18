@@ -8,5 +8,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   site: 'https://franriv24.github.io',
-  base: '/comodoro-api.github.io',
+  base: '/comodoro-api-docs',
 });
